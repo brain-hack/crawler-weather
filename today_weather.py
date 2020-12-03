@@ -120,3 +120,28 @@ class TodayWeather:
 
     def add_time_climate(self,time_climate):
         self.time_climate = time_climate
+
+class box_item:
+    def __init__(self,today_tags,today_twoone_tags,today_chart_level_tags):
+        self.today_tags = today_tags
+        self.today_twoone_tags = today_twoone_tags
+        self.today_chart_level_tags = today_chart_level_tags
+
+    def __str__(self):
+        return f'{self.today_tags}\t{self.today_twoone_tags}\t{self.today_rain_tags}\t{self.today_rainfall_tags}\t{self.today_rainfall_i_tags}' \
+               f'\t{self.today_temp_tags}\t{self.today_temp_de_tags}\t{self.today_temp_o_tags}\n'
+
+class WeeklyClimate:
+    def __init__(self, cell_date, cell_weather, cell_temperature):
+        self.cell_date = cell_date
+        self.cell_weather = cell_weather
+        self.cell_temperature = cell_temperature
+
+    def __str__(self):
+        return f'{self.cell_date}\t{self.cell_weather}\t{self.cell_temperature}\\n'
+
+class Weekly:
+    def __init__(self, cell_date, cell_weather, cell_temperature):
+        self.cell_date = cell_date
+        self.cell_weather = cell_weather
+        self.cell_temperature = cell_temperature

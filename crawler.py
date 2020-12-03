@@ -10,6 +10,9 @@ from today_weather import ClimateRain
 from today_weather import ClimateHumidity
 from today_weather import ClimateWind
 from today_weather import TimeClimate
+from today_weather import box_item
+from today_weather import WeeklyClimate
+from today_weather import Weekly
 
 def parse_now_temperature(today_weather_tag):
     now_temperature_tag = today_weather_tag.select_one('div.weather_area > strong')
@@ -136,6 +139,53 @@ def parse_time_climate(soup):
 
     return TimeClimate(climate_rains,climate_humidities,climate_winds)
 
+def box_today(box_color):
+    today_tags = box_color.select(
+        'li.item > span > span > strong.ttl').text
+    today_twoone_tags = box_color.select(
+        'li.item > span > span > strong.ttl > span.sub').text
+    today_rain_tags = box_color.select(
+        'li.item > span > span > strong.rainfall > span.blind').text
+    today_rainfall_tags = box_color.select(
+        'li.item > span > span > strong.rainfall').text
+    today_rainfall_i_tags = box_color.select(
+        'li.item > span > span > i > span.blind').text
+    today_temp_tags = box_color.select(
+        'li.item > span > span > span.data > span.blind').text
+    today_temp_de_tags = box_color.select(
+        'li.item > span > span > span.data').text
+    today_temp_o_tags = box_color.select(
+        'li.item > span > span > span.data > span.degree').text
+    return [box_item(today_tags,today_twoone_tags,today_rain_tags,today_rainfall_tags,today_rainfall_i_tags,today_temp_tags,today_temp_de_tags,today_temp_o_tags)
+           for today_tags,today_twoone_tags,today_rain_tags,today_rainfall_tags,today_rainfall_i_tags,today_temp_tags,today_temp_de_tags,today_temp_o_tags
+           in zip(today_tags,today_twoone_tags,today_rain_tags,today_rainfall_tags,today_rainfall_i_tags,today_temp_tags,today_temp_de_tags,today_temp_o_tags)]
+
+def scroll(scroll):
+    scroll_values = []
+    for scroll_value_li in scroll:
+        cell_date = scroll_value_li.select_one('div > div.cell_date > span')
+        cell_weather = scroll_value_li.select_one('div > div.cell_weather > span')
+        cell_temperature = scroll_value_li.select_one('div > div.cell_temperature > span')
+        scroll_value = scroll_value_tag.text.strip()
+        if 'colspan' in scroll_value_li.attrs:
+            for i in range(int(scroll_value_li['colspan'])):
+                scroll_values.append(scroll_value)
+        else:
+            scroll_values.append(scroll_value)
+
+    return [WeeklyClimate(cell_date, cell_weather, cell_temperature) for cell_date, cell_weather, cell_temperature
+            in zip(cell_date, cell_weather, cell_temperature)]
+
+def parse_weekly(soup):
+    weekly_tag = soup.select_one('#weekly')
+
+    box_color = weekly_tag.select_one('ul.box_color')
+    scroll = weekly_tag.select_one('div.scroll_control end_left > div.scroll_area > ul.week_list')
+
+    week_box_color = box_today(box_color)
+    week_scroll = scroll(scroll)
+
+    return Weekly(week_box_color,week_scroll)
 
 def crawl():
     url = 'https://weather.naver.com/'
@@ -148,13 +198,13 @@ def crawl():
     soup = BeautifulSoup(html,'lxml')
 
     today_weather = parse_today_weather(soup)
-
     print(today_weather)
 
     time_climate = parse_time_climate(soup)
-
     print(time_climate)
 
+    weekly = parse_weekly(soup)
+    print(weekly)
 
 if __name__ == "__main__":
     crawl()
