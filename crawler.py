@@ -145,7 +145,7 @@ def crawl():
     html = res.text
 
     #svg tag를 위한 xml 파서
-    soup = BeautifulSoup(html,'lxml')
+    soup = BeautifulSoup(html, 'html.parser')
 
     today_weather = parse_today_weather(soup)
 
