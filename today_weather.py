@@ -5,7 +5,6 @@ class TodayChart:
         self.fine_dust_level = today_chart_level_list[0]
         self.ultrafine_dust_level = today_chart_level_list[1]
         self.ultraviolet_ray_level = today_chart_level_list[2]
-        self.sunrise_time = today_chart_level_list[3]
 
         self.fine_dust_value = today_chart_value_list[0]
         self.ultrafine_dust_value = today_chart_value_list[1]
@@ -16,7 +15,6 @@ class TodayChart:
         return f'미세먼지\t{self.fine_dust_level}\t{self.fine_dust_value}\n' \
                f'초미세먼지\t{self.ultrafine_dust_level}\t{self.ultrafine_dust_value}\n' \
                f'자외선\t\t{self.ultraviolet_ray_level}\t{self.ultraviolet_ray_value}\n' \
-               f'일출시간\t{self.sunrise_time}\n' \
 
 class TodaySummary:
 
@@ -109,7 +107,7 @@ class TodayWeather:
 
     def __str__(self):
         return f'{self.now_temperature}\n' \
-               f'============================\n' \
+               f'====================   ========\n' \
                f'{self.today_summary}' \
                f'============================\n' \
                f'{self.today_chart}' \
